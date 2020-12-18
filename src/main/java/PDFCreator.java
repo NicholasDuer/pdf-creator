@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class PDFCreator {
 
   private final InstructionReader reader;
@@ -13,9 +15,9 @@ public class PDFCreator {
       throw new PDFException("Failed to create new PDF");
     }
 
-    while(reader.hasNext()) {
-      Instruction instruction = reader.next();
+    List<Instruction> instructions = reader.readInstructions();
 
+    for (Instruction instruction : instructions) {
       if (instruction.isCommand()) {
         writer.executeCommand(instruction.getCommand());
       } else {

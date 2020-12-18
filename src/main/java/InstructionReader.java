@@ -1,6 +1,6 @@
+import java.util.List;
+
 public interface InstructionReader {
 
-  boolean hasNext();
-
-  Instruction next();
+  List<Instruction> readInstructions();
 }
