@@ -17,6 +17,7 @@ public class PDFCreatorTests {
   String DUMMY_PDF_NAME = "dummy.pdf";
   String DUMMY_INPUT_TEXT_1 = "Sample sentence 1.";
   Command BOLD_COMMAND = Command.withCommandType(CommandType.BOLD);
+  Command INDENT_COMMAND = Command.indentByAmount(5);
 
   @Test
   public void createsAndClosesPDFDocument() {
@@ -122,6 +123,23 @@ public class PDFCreatorTests {
       oneOf(reader).next();
       will(returnValue(Instruction.withCommand(BOLD_COMMAND)));
       oneOf(writer).executeCommand(BOLD_COMMAND);
+      ignoring(reader).hasNext();
+    }});
+
+    pdfCreator.createPDF(DUMMY_PDF_NAME);
+  }
+
+  @Test
+  public void supportsIndentCommand() {
+    context.checking(new Expectations() {{
+      ignoring(writer).createDocument(DUMMY_PDF_NAME);
+      will(returnValue(true));
+      ignoring(writer).closeDocument();
+      oneOf(reader).hasNext();
+      will(returnValue(true));
+      oneOf(reader).next();
+      will(returnValue(Instruction.withCommand(INDENT_COMMAND)));
+      oneOf(writer).executeCommand(INDENT_COMMAND);
       ignoring(reader).hasNext();
     }});
 
