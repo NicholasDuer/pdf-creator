@@ -1,10 +1,11 @@
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import java.io.FileOutputStream;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.layout.element.Text;
 import java.io.IOException;
 
 public class ITextPDFWriter implements PDFWriter {
@@ -12,17 +13,46 @@ public class ITextPDFWriter implements PDFWriter {
   private boolean documentIsOpen;
   private Document document;
 
+  private final static float INDENT_UNIT =
+      getDefaultFont().getWidth("WWWW") / (float) 1000;
+
   private Paragraph currentParagraph;
-  private Font font;
+  private int currentIndent;
+  private PdfFont currentFont;
+
 
   public ITextPDFWriter() {
     documentIsOpen = false;
     currentParagraph = new Paragraph();
-    font = getDefaultFont();
+    currentFont = getDefaultFont();
+    currentIndent = 0;
   }
 
-  private Font getDefaultFont() {
-    return new Font(FontFamily.TIMES_ROMAN, 12);
+  private static PdfFont getDefaultFont() {
+    try {
+      return PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  private static PdfFont getBoldFont() {
+    try {
+      return PdfFontFactory.createFont(StandardFonts.TIMES_BOLD);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  private static PdfFont getItalicFont() {
+    try {
+      return PdfFontFactory.createFont(StandardFonts.TIMES_ITALIC);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override
@@ -32,10 +62,8 @@ public class ITextPDFWriter implements PDFWriter {
       return false;
     } else {
       try {
-        document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(pdfName));
-        document.open();
-      } catch (IOException | DocumentException e) {
+        document = new Document(new PdfDocument(new PdfWriter(pdfName)));
+      } catch (IOException e) {
         e.printStackTrace();
         return false;
       }
@@ -58,35 +86,32 @@ public class ITextPDFWriter implements PDFWriter {
 
   @Override
   public void writeText(String text) {
-    currentParagraph.setFont(font);
-    currentParagraph.add(text);
+    currentParagraph.add(new Text(text).setFont(currentFont));
   }
 
   private void addParagraph() {
-    try {
-      document.add(currentParagraph);
-      currentParagraph = new Paragraph();
-    } catch (DocumentException e) {
-      e.printStackTrace();
-    }
+    document.add(currentParagraph);
+    currentParagraph = new Paragraph();
   }
 
   @Override
   public void executeCommand(Command command) {
     switch (command.getCommandType()) {
       case BOLD:
-        font = new Font(font.getFamily(), font.getSize(), Font.BOLD);
+        currentFont = getBoldFont();
         break;
       case FILL:
         break;
       case NOFILL:
         break;
       case REGULAR:
-        font = getDefaultFont();
+        currentFont = getDefaultFont();
       case INDENT:
+        currentIndent = Math.max(0, currentIndent + command.getIndentAmount());
+        currentParagraph.setMarginLeft(currentIndent * INDENT_UNIT);
         break;
       case ITALIC:
-        font = new Font(font.getFamily(), font.getSize(), Font.ITALIC);
+        currentFont = getItalicFont();
         break;
       case PARAGRAPH:
         addParagraph();

@@ -9,8 +9,8 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
-    compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.2'
+    // https://search.maven.org/artifact/com.itextpdf/itext7-core/7.1.13/pom
+    implementation 'com.itextpdf:itext7-core:7.1.13'
 
     // unit test framework
     testImplementation group: 'org.jmock', name: 'jmock', version: '2.5.1'
