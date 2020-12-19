@@ -20,4 +20,38 @@ public class Command {
   public static Command indentByAmount(Integer indentAmount) {
     return new Command(CommandType.INDENT, indentAmount);
   }
+
+  public CommandType getCommandType() {
+    return commandType;
+  }
+
+  public Integer getIndentAmount() {
+    return indentAmount;
+  }
+
+
+  /* Overriden for testing purposes */
+  @Override
+  public int hashCode() {
+    return commandType.ordinal() * 23;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Command)) {
+      return false;
+    }
+
+    Command thatCommand = (Command) obj;
+
+    if (getCommandType() != thatCommand.getCommandType()) {
+      return false;
+    }
+
+    if (getCommandType() == CommandType.INDENT) {
+      return getIndentAmount().equals(thatCommand.getIndentAmount());
+    }
+
+    return true;
+  }
 }

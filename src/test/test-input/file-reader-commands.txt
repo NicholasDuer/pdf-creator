@@ -1,0 +1,4 @@
+.italic
+.regular
+.indent +2
+.indent -3

@@ -30,12 +30,15 @@ public class InstructionFileReader implements InstructionReader {
           /* Command instruction */
           Command command = parseCommand(line.substring(1));
 
+          instructions.add(Instruction.withCommand(command));
+
         } else {
           /* Text instruction */
-          instructions.add(Instruction.withText(line));
+          instructions.add(Instruction.withText(line + '\n'));
         }
 
         line = reader.readLine();
+
       }
 
       return instructions;
@@ -53,7 +56,7 @@ public class InstructionFileReader implements InstructionReader {
 
     if (tokens.length == 1) {
       try {
-        return Command.withCommandType(CommandType.valueOf(tokens[0]));
+        return Command.withCommandType(CommandType.valueOf(tokens[0].toUpperCase()));
       } catch (IllegalArgumentException e) {
         throw new IllegalArgumentException("Invalid command specified.");
       }

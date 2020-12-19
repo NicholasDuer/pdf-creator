@@ -16,7 +16,7 @@ public class Instruction {
   }
 
   public static Instruction withText(String text) {
-    return new Instruction(null,false, text);
+    return new Instruction(null, false, text);
   }
 
   public boolean isCommand() {
@@ -29,5 +29,29 @@ public class Instruction {
 
   public Command getCommand() {
     return command;
+  }
+
+  /* Overriden for testing purposes */
+  @Override
+  public int hashCode() {
+    return (isCommand() ? getCommand().hashCode() : getText().hashCode() * 17 );
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Instruction)) {
+      return false;
+    }
+    Instruction thatInstruction = (Instruction) obj;
+
+    if (!isCommand() == thatInstruction.isCommand()) {
+      return false;
+    }
+
+    if (isCommand()) {
+      return getCommand().equals(thatInstruction.getCommand());
+    } else {
+      return getText().equals(thatInstruction.getText());
+    }
   }
 }
