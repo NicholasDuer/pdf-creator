@@ -21,9 +21,7 @@ public class PDFCreator {
       if (instruction.isCommand()) {
         writer.executeCommand(instruction.getCommand());
       } else {
-        if (!writer.writeText(instruction.getText())) {
-          throw new PDFException("Failed to write text to PDF");
-        }
+        writer.writeText(instruction.getText());
       }
     }
 

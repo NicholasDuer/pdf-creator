@@ -81,31 +81,10 @@ public class PDFCreatorTests {
       will(returnValue(true));
       ignoring(writer).closeDocument();
       ignoring(reader).readInstructions(); will(returnValue(DUMMY_TEXT_INSTRUCTIONS));
-      oneOf(writer).writeText(DUMMY_INPUT_TEXT); will(returnValue(true));
+      oneOf(writer).writeText(DUMMY_INPUT_TEXT);
     }});
 
     pdfCreator.createPDF(DUMMY_PDF_NAME);
-  }
-
-  @Test
-  public void throwsExceptionUponWriteFailure() {
-    context.checking(new Expectations() {{
-      ignoring(writer).createDocument(DUMMY_PDF_NAME);
-      will(returnValue(true));
-      ignoring(writer).closeDocument();
-      ignoring(reader).readInstructions(); will(returnValue(DUMMY_TEXT_INSTRUCTIONS));
-      oneOf(writer).writeText(DUMMY_INPUT_TEXT); will(returnValue(false));
-    }});
-
-    try {
-      pdfCreator.createPDF(DUMMY_PDF_NAME);
-
-      /* Should have thrown an exception */
-      fail();
-    } catch (PDFException e) {
-      Assert.assertThat(e.getMessage(),
-          containsString("Failed to write text to PDF"));
-    }
   }
 
   @Test

@@ -41,6 +41,7 @@ public class InstructionFileReader implements InstructionReader {
 
       }
 
+      reader.close();
       return instructions;
 
     } catch (IOException | IllegalArgumentException e) {

@@ -4,7 +4,7 @@ public interface PDFWriter {
 
   void closeDocument();
 
-  boolean writeText(String text);
+  void writeText(String text);
 
   void executeCommand(Command command);
 }
