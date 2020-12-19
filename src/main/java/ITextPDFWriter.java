@@ -6,6 +6,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.TextAlignment;
 import java.io.IOException;
 
 public class ITextPDFWriter implements PDFWriter {
@@ -19,7 +20,6 @@ public class ITextPDFWriter implements PDFWriter {
   private Paragraph currentParagraph;
   private int currentIndent;
   private PdfFont currentFont;
-
 
   public ITextPDFWriter() {
     documentIsOpen = false;
@@ -86,6 +86,8 @@ public class ITextPDFWriter implements PDFWriter {
 
   @Override
   public void writeText(String text) {
+    Text formattedText = new Text(text);
+    formattedText.setFont(currentFont);
     currentParagraph.add(new Text(text).setFont(currentFont));
   }
 
@@ -101,14 +103,15 @@ public class ITextPDFWriter implements PDFWriter {
         currentFont = getBoldFont();
         break;
       case FILL:
+        currentParagraph.setTextAlignment(TextAlignment.JUSTIFIED);
         break;
       case NOFILL:
+        currentParagraph.setTextAlignment(TextAlignment.LEFT);
         break;
       case REGULAR:
         currentFont = getDefaultFont();
       case INDENT:
         currentIndent = Math.max(0, currentIndent + command.getIndentAmount());
-        currentParagraph.setMarginLeft(currentIndent * INDENT_UNIT);
         break;
       case ITALIC:
         currentFont = getItalicFont();
