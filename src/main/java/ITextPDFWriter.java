@@ -11,24 +11,13 @@ import java.io.IOException;
 
 public class ITextPDFWriter implements PDFWriter {
 
-  public static void main(String[] args) {
-    ITextPDFWriter writer = new ITextPDFWriter();
-    writer.createDocument("my.pdf");
-    writer.writeText("nicholas duer");
-    writer.executeCommand(Command.withCommandType(CommandType.LARGE));
-    writer.writeText(" hello");
-    writer.executeCommand(Command.withCommandType(CommandType.REGULAR));
-    writer.writeText(" hi there");
-    writer.closeDocument();
-  }
-
   private boolean documentIsOpen;
   private Document document;
 
   private final static float INDENT_UNIT =
-      getDefaultFont().getWidth("WWWW") / (float) 1000;
-  private final static float LARGE_FONT_SIZE = 20;
-  private final static float REGULAR_FONT_SIZE = 12;
+      getDefaultFont().getWidth("WWWW") / (float) 254;
+  private final static float LARGE_FONT_SIZE = 23;
+  private final static float REGULAR_FONT_SIZE = 13;
 
   private Paragraph currentParagraph;
   private int currentIndent;
@@ -134,6 +123,7 @@ public class ITextPDFWriter implements PDFWriter {
         break;
       case INDENT:
         currentIndent = Math.max(0, currentIndent + command.getIndentAmount());
+        currentParagraph.setMarginLeft(currentIndent * INDENT_UNIT);
         break;
       case ITALIC:
         currentFont = getItalicFont();
@@ -141,6 +131,7 @@ public class ITextPDFWriter implements PDFWriter {
       case PARAGRAPH:
         addParagraph();
         currentParagraph = new Paragraph();
+        break;
       default:
         throw new PDFException(
             "Invalid command given to pdf writer : " + command.getCommandType()

@@ -27,6 +27,10 @@ public class InstructionFileReader implements InstructionReader {
 
       while (line != null) {
 
+        if (line.length() == 0) {
+          continue;
+        }
+
         if (line.charAt(0) == '.') {
           /* Command instruction */
           Command command = parseCommand(line.substring(1));
@@ -35,7 +39,7 @@ public class InstructionFileReader implements InstructionReader {
 
         } else {
           /* Text instruction */
-          instructions.add(Instruction.withText(line + '\n'));
+          instructions.add(Instruction.withText(line));
         }
 
         line = reader.readLine();

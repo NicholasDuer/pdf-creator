@@ -8,6 +8,11 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = 'Demo'
+}
+
+
 dependencies {
     // https://search.maven.org/artifact/com.itextpdf/itext7-core/7.1.13/pom
     implementation 'com.itextpdf:itext7-core:7.1.13'
