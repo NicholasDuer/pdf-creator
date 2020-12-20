@@ -13,15 +13,15 @@ public class InstructionFileReaderTests {
   @Test
   public void translatesTextInputIntoWriteInstruction() {
     final List<Instruction> REQUIRED_TRANSLATION = new ArrayList<>() {{
-      add(Instruction.withText("“Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor\n"));
-      add(Instruction.withText("incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud\n"));
-      add(Instruction.withText("exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure\n"));
-      add(Instruction.withText("dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n"));
-      add(Instruction.withText("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit\n"));
-      add(Instruction.withText("anim id est laborum.\n"));
+      add(Instruction.withText("“Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"));
+      add(Instruction.withText("incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud"));
+      add(Instruction.withText("exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure"));
+      add(Instruction.withText("dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."));
+      add(Instruction.withText("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit"));
+      add(Instruction.withText("anim id est laborum."));
     }};
 
-    String filePath = new File("").getAbsolutePath().concat("\\src\\test\\test-input\\file-reader-text.txt");
+    String filePath = new File("").getAbsolutePath().concat("\\src\\test\\resources\\file-reader-text.txt");
     InstructionFileReader fileReader = new InstructionFileReader(filePath);
 
     List<Instruction> translatedInstructions = fileReader.readInstructions();
@@ -37,7 +37,7 @@ public class InstructionFileReaderTests {
       add(Instruction.withCommand(Command.indentByAmount(-3)));
     }};
 
-    String filePath = new File("").getAbsolutePath().concat("\\src\\test\\test-input\\file-reader-commands.txt");
+    String filePath = new File("").getAbsolutePath().concat("\\src\\test\\resources\\file-reader-commands.txt");
     InstructionFileReader fileReader = new InstructionFileReader(filePath);
 
     List<Instruction> translatedInstructions = fileReader.readInstructions();
@@ -46,7 +46,7 @@ public class InstructionFileReaderTests {
 
   @Test
   public void throwsExceptionIfAnInvalidCommandIsGiven() {
-    String filePath = new File("").getAbsolutePath().concat("\\src\\test\\test-input\\file-reader-invalid-command.txt");
+    String filePath = new File("").getAbsolutePath().concat("\\src\\test\\resources\\file-reader-invalid-command.txt");
     InstructionFileReader fileReader = new InstructionFileReader(filePath);
 
     try {
