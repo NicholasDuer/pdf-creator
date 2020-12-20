@@ -1,4 +1,5 @@
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -6,7 +7,6 @@ import java.util.List;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.Sequence;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class PDFCreatorTests {
@@ -57,7 +57,7 @@ public class PDFCreatorTests {
       /* Should have thrown an exception */
       fail();
     } catch (PDFException e) {
-      Assert.assertThat(e.getMessage(),
+      assertThat(e.getMessage(),
           containsString("Failed to create new PDF"));
     }
   }

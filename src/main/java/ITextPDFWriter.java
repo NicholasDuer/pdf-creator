@@ -11,22 +11,38 @@ import java.io.IOException;
 
 public class ITextPDFWriter implements PDFWriter {
 
+  public static void main(String[] args) {
+    ITextPDFWriter writer = new ITextPDFWriter();
+    writer.createDocument("my.pdf");
+    writer.writeText("nicholas duer");
+    writer.executeCommand(Command.withCommandType(CommandType.LARGE));
+    writer.writeText(" hello");
+    writer.executeCommand(Command.withCommandType(CommandType.REGULAR));
+    writer.writeText(" hi there");
+    writer.closeDocument();
+  }
+
   private boolean documentIsOpen;
   private Document document;
 
   private final static float INDENT_UNIT =
       getDefaultFont().getWidth("WWWW") / (float) 1000;
+  private final static float LARGE_FONT_SIZE = 20;
+  private final static float REGULAR_FONT_SIZE = 12;
 
   private Paragraph currentParagraph;
   private int currentIndent;
   private PdfFont currentFont;
+  private float currentFontSize;
 
   public ITextPDFWriter() {
     documentIsOpen = false;
     currentParagraph = new Paragraph();
     currentFont = getDefaultFont();
     currentIndent = 0;
+    currentFontSize = REGULAR_FONT_SIZE;
   }
+
 
   private static PdfFont getDefaultFont() {
     try {
@@ -88,7 +104,8 @@ public class ITextPDFWriter implements PDFWriter {
   public void writeText(String text) {
     Text formattedText = new Text(text);
     formattedText.setFont(currentFont);
-    currentParagraph.add(new Text(text).setFont(currentFont));
+    formattedText.setFontSize(currentFontSize);
+    currentParagraph.add(formattedText);
   }
 
   private void addParagraph() {
@@ -99,6 +116,9 @@ public class ITextPDFWriter implements PDFWriter {
   @Override
   public void executeCommand(Command command) {
     switch (command.getCommandType()) {
+      case LARGE:
+        currentFontSize = LARGE_FONT_SIZE;
+        break;
       case BOLD:
         currentFont = getBoldFont();
         break;
@@ -109,7 +129,9 @@ public class ITextPDFWriter implements PDFWriter {
         currentParagraph.setTextAlignment(TextAlignment.LEFT);
         break;
       case REGULAR:
+        currentFontSize = REGULAR_FONT_SIZE;
         currentFont = getDefaultFont();
+        break;
       case INDENT:
         currentIndent = Math.max(0, currentIndent + command.getIndentAmount());
         break;
@@ -119,6 +141,10 @@ public class ITextPDFWriter implements PDFWriter {
       case PARAGRAPH:
         addParagraph();
         currentParagraph = new Paragraph();
+      default:
+        throw new PDFException(
+            "Invalid command given to pdf writer : " + command.getCommandType()
+                .toString());
     }
   }
 }

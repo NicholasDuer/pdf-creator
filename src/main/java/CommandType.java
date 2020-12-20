@@ -1,4 +1,5 @@
 public enum CommandType {
+  LARGE(true),
   PARAGRAPH(true),
   FILL(true),
   NOFILL(true),

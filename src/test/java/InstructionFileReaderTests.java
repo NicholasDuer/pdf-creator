@@ -1,4 +1,7 @@
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,6 +42,21 @@ public class InstructionFileReaderTests {
 
     List<Instruction> translatedInstructions = fileReader.readInstructions();
     assertEquals(REQUIRED_TRANSLATION, translatedInstructions);
+  }
+
+  @Test
+  public void throwsExceptionIfAnInvalidCommandIsGiven() {
+    String filePath = new File("").getAbsolutePath().concat("\\src\\test\\test-input\\file-reader-invalid-command.txt");
+    InstructionFileReader fileReader = new InstructionFileReader(filePath);
+
+    try {
+      fileReader.readInstructions();
+
+      /* Should have thrown an exception */
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertThat(e.getMessage(), containsString("Invalid command specified : baditalic"));
+    }
   }
 
 }

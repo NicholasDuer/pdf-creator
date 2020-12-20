@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class InstructionFileReader implements InstructionReader {
       reader.close();
       return instructions;
 
-    } catch (IOException | IllegalArgumentException e) {
+    } catch (IOException e) {
 
       e.printStackTrace();
       return new ArrayList<>();
@@ -59,7 +60,7 @@ public class InstructionFileReader implements InstructionReader {
       try {
         return Command.withCommandType(CommandType.valueOf(tokens[0].toUpperCase()));
       } catch (IllegalArgumentException e) {
-        throw new IllegalArgumentException("Invalid command specified.");
+        throw new IllegalArgumentException("Invalid command specified : " + tokens[0]);
       }
     }
 
@@ -69,15 +70,16 @@ public class InstructionFileReader implements InstructionReader {
         try {
           return Command.indentByAmount(Integer.parseInt(tokens[1]));
         } catch (NumberFormatException e) {
-          throw new IllegalArgumentException("Invalid command specified.");
+          throw new IllegalArgumentException("Invalid argument to indent specified : " + tokens[1]);
         }
 
       } else {
-        throw new IllegalArgumentException("Invalid command specified.");
+        throw new IllegalArgumentException("Invalid command specified : " + tokens[0]);
       }
     }
 
     /* More than 2 tokens in the command */
-    throw new IllegalArgumentException("Invalid command specified.");
+    throw new IllegalArgumentException("Invalid command specified :" + Arrays
+        .toString(tokens));
   }
 }
