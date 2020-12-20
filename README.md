@@ -38,3 +38,4 @@ provide a new instruction set and pdf name:
 ```
 gradlew run --args="my-input.txt my.pdf"
 ```
+This pdf-creator was build by Nicholas Duer.

@@ -14,6 +14,12 @@ public enum CommandType {
     this.hasNoParams = hasNoParams;
   }
 
+  /**
+   *
+   * @return True iff the command does not need to come with extra parameters.
+   * For example, the indent command requires information about the number of units
+   * to indent by.
+   */
   boolean hasNoParams() {
     return hasNoParams;
   }

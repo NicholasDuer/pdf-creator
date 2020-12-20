@@ -1,3 +1,7 @@
+/**
+ * Represents a single instruction given to the PDFCreator. As described in the
+ * README, an instruction is either a command or text to be written.
+ */
 public class Instruction {
 
   private final Command command;
@@ -11,14 +15,30 @@ public class Instruction {
     this.text = text;
   }
 
+  /**
+   * Factory method used to build a command instruction.
+   * @param command The command to be executed upon execution of the instruction.
+   * @return An instruction object which holds the given command.
+   */
   public static Instruction withCommand(Command command) {
     return new Instruction(command, true, null);
   }
 
+  /**
+   * Factory method used to build a text instruction.
+   * @param text The text to be written to the pdf upon execution of the
+   *             instruction.
+   * @return An instruction object which holds the given text.
+   */
   public static Instruction withText(String text) {
     return new Instruction(null, false, text);
   }
 
+  /**
+   *
+   * @return True if the instruction represent a command to be carried out, false
+   * if the instruction represents some text to be written to the pdf.
+   */
   public boolean isCommand() {
     return isCommand;
   }

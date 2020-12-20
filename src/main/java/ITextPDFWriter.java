@@ -9,13 +9,23 @@ import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import java.io.IOException;
 
+/**
+ * Implementation of the PDFWriter interface which communicates with
+ * iText7's API to format PDFs. The writer only tracks one document at a time.
+ * To edit two different documents using only one PDFWriter class, must close one
+ * document before opening another. The object uses TimesNewRoman as its font.
+ */
 public class ITextPDFWriter implements PDFWriter {
 
   private boolean documentIsOpen;
   private Document document;
 
+  /* Divided by 254 because it seems that iText7 measures in inches.
+   * As a result, each indent unit will indent by approximately the size of
+   * the text: WWWW */
   private final static float INDENT_UNIT =
       getDefaultFont().getWidth("WWWW") / (float) 254;
+
   private final static float LARGE_FONT_SIZE = 23;
   private final static float REGULAR_FONT_SIZE = 13;
 
@@ -31,7 +41,6 @@ public class ITextPDFWriter implements PDFWriter {
     currentIndent = 0;
     currentFontSize = REGULAR_FONT_SIZE;
   }
-
 
   private static PdfFont getDefaultFont() {
     try {
@@ -83,6 +92,9 @@ public class ITextPDFWriter implements PDFWriter {
       System.out
           .println("PDFWriter is not currently writing to an open document");
     } else {
+      /* Have to add the current paragraph to the PDF document as we cannot
+       * rely on the user starting a new empty paragraph before closing
+       * the document. */
       addParagraph();
       document.close();
       documentIsOpen = false;

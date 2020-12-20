@@ -7,10 +7,20 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Implementation of the instruction reader interface. Reads instructions
+ * from a text file and translates a plain text instruction into an Instruction
+ * Object. Instructions are read line by line.
+ */
 public class InstructionFileReader implements InstructionReader {
 
   private BufferedReader reader;
 
+  /**
+   * Creates an InstructionFileReader which reads instructions from the given
+   * input file.
+   * @param instructionFile Path to the text file to be read.
+   */
   public InstructionFileReader(String instructionFile) {
     try {
       reader = new BufferedReader(new FileReader(instructionFile));
